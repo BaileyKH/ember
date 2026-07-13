@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import { respondWithJSON } from './json.js'
 import { BadRequestError } from './errors.js' 
 import { hashPassword } from '../auth.js'
 import { ExistingUser } from '../db/schema.js'
@@ -34,6 +33,6 @@ export async function handlerUserCreate(req: Request, res: Response) {
         username: newUser.username
     }
 
-    respondWithJSON(201, publicUser)
+    return res.status(201).json(publicUser)
 
 }

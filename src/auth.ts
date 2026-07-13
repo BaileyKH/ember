@@ -1,7 +1,5 @@
 import { randomBytes } from "crypto";
 import * as argon2 from "argon2"
-import jwt from 'jsonwebtoken'
-import type { JwtPayload } from "jsonwebtoken";
 
 export const ACCESS_TOKEN_ISSUER = "ember-access";
 

@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { cfg } from "../config.js";
-import { respondWithJSON } from "./json.js";
 import {
   BadRequestError,
   NotFoundError,
@@ -35,7 +34,7 @@ export function middlewareErrorHandler(err: Error, req: Request, res: Response, 
     console.log(errStr);
   }
 
-  return respondWithJSON(statusCode, { error: message })
+  return res.status(statusCode).json({ error: message })
 }
 
 function errStringFromError(err: unknown) {
