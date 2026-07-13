@@ -14,6 +14,7 @@ export const users = pgTable("users", {
 });
 
 export type NewUser = typeof users.$inferInsert;
+export type ExistingUser = typeof users.$inferSelect;
 
 export const trips = pgTable("trips", {
     id: uuid("id").primaryKey().defaultRandom(),

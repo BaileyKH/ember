@@ -1,20 +1,9 @@
 {
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^26.1.1",
-    "drizzle-kit": "^0.31.10",
-    "typescript": "^7.0.2"
-  },
   "name": "ember",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "drizzle-orm": "^0.45.2",
-    "express": "^5.2.1",
-    "postgres": "^3.4.9",
-    "undici-types": "^8.3.0"
-  },
+  "type": "module",
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
@@ -22,16 +11,29 @@
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/BaileyKH/ember.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "bugs": {
     "url": "https://github.com/BaileyKH/ember/issues"
   },
-  "homepage": "https://github.com/BaileyKH/ember#readme"
+  "homepage": "https://github.com/BaileyKH/ember#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.1.1",
+    "drizzle-kit": "^0.31.10",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "drizzle-orm": "^0.45.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "postgres": "^3.4.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BaileyKH/ember.git"
+  }
 }
