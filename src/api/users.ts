@@ -18,21 +18,42 @@ export async function handlerUserCreate(req: Request, res: Response) {
     }
 
     if (typeof password !== "string" || password.length < 8 ) {
-        throw new BadRequestError("Password is too short. Try again")
+        throw new BadRequestError("Please provide a valid email, username, and password")
     }
 
+    const normalizedEmail = email.toLowerCase().trim()
+    const trimmedUsername = typeof username === "string" ? username.trim() : ""
+    if (!/^[a-zA-Z0-9_]{3,30}$/.test(trimmedUsername)) {
+        throw new BadRequestError("Username must be 3-30 characters (letters, numbers, underscores)")
+    }
     const hashedPassword = await hashPassword(password)
-    const newUser = await createUser({ email, username, hashedPassword })
 
-    const publicUser: PublicUser = {
-        id: newUser.id,
-        createdAt: newUser.createdAt,
-        updatedAt: newUser.updatedAt,
-        email: newUser.email,
-        profileImg: newUser.profileImg,
-        username: newUser.username
+    try {
+        const newUser = await createUser({ email: normalizedEmail, username, hashedPassword })
+
+        const publicUser: PublicUser = {
+            id: newUser.id,
+            createdAt: newUser.createdAt,
+            updatedAt: newUser.updatedAt,
+            email: newUser.email,
+            profileImg: newUser.profileImg,
+            username: newUser.username
+        }
+
+        return res.status(201).json(publicUser)
+
+    } catch (err: any) {
+        if (err.cause?.code === '23505' || err.code === '23505') {
+            const constraint = err.cause?.constraint_name ?? err.constraint_name ?? err.constraint ?? '';
+            if (constraint.includes('email')) {
+                throw new BadRequestError("Email already in use");
+            }
+            if (constraint.includes('username')) {
+                throw new BadRequestError("Username already taken");
+            }
+            throw new BadRequestError("Email or username already in use");
+        }
+        throw err
     }
-
-    return res.status(201).json(publicUser)
 
 }

@@ -15,6 +15,13 @@
       "when": 1783711232967,
       "tag": "0001_slimy_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784127246884,
+      "tag": "0002_dry_ultron",
+      "breakpoints": true
     }
   ]
 }

@@ -9,8 +9,6 @@ const PORT = cfg.port
 
 app.use(express.json());
 
-app.use(middlewareErrorHandler);
-
 app.post("/api/users", (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(handlerUserCreate(req, res)).catch(next)
 })
@@ -18,6 +16,8 @@ app.post("/api/users", (req: Request, res: Response, next: NextFunction) => {
 app.post("/api/reset", (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(handlerReset(cfg, req, res)).catch(next)
 })
+
+app.use(middlewareErrorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server started on Port: ${PORT}`)
