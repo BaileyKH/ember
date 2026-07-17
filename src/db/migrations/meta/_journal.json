@@ -22,6 +22,34 @@
       "when": 1784127246884,
       "tag": "0002_dry_ultron",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784218611898,
+      "tag": "0003_tan_vin_gonzales",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1784219598192,
+      "tag": "0004_fat_the_fallen",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1784220691029,
+      "tag": "0005_next_winter_soldier",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1784230647777,
+      "tag": "0006_shiny_toxin",
+      "breakpoints": true
     }
   ]
 }

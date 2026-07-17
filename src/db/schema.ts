@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, timestamp, varchar, uuid, date, text, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, pgEnum, timestamp, varchar, uuid, date, text, uniqueIndex, index, integer } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 export const users = pgTable("users", {
@@ -11,7 +11,8 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 256 }).unique().notNull(),
   profileImg: text("profile_image"),
   username: varchar("username", { length: 30 }).notNull(),
-  hashedPassword: varchar("hashed_password").notNull()
+  hashedPassword: varchar("hashed_password").notNull(),
+  sessionVersion: integer("session_version").notNull().default(0),
 }, (table) => [
   uniqueIndex("users_username_lower_unique").on(sql`lower(${table.username})`),
 ]);
@@ -68,3 +69,32 @@ export const tripNotes = pgTable("trip_notes", {
 })
 
 export type NewNote = typeof tripNotes.$inferInsert
+
+export const refreshTokens = pgTable("refresh_tokens", {
+  tokenHash: text("token_hash").primaryKey(),
+  familyId: uuid("family_id")
+    .notNull()
+    .defaultRandom(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  revokedAt: timestamp("revoked_at")
+}, (table) => [
+        index("refresh_tokens_family_id_idx").on(table.familyId),
+],)
+
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  tokenHash: text("token_hash").primaryKey(),
+  userId: uuid("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  expiresAt: timestamp("expires_at").notNull(),
+  usedAt: timestamp("used_at"),
+}, (table) => [
+  index("password_reset_tokens_user_id_idx").on(table.userId),
+]);

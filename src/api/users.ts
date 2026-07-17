@@ -3,8 +3,9 @@ import { BadRequestError } from './errors.js'
 import { hashPassword } from '../auth.js'
 import { ExistingUser } from '../db/schema.js'
 import { createUser } from '../db/queries/users.js'
+import { validateNewPassword } from '../passwordPolicy.js'
 
-type PublicUser = Omit<ExistingUser, "hashedPassword">
+export type PublicUser = Omit<ExistingUser, "hashedPassword" | "sessionVersion">
 
 export async function handlerUserCreate(req: Request, res: Response) {
     const { email, username, password } = req.body
@@ -17,19 +18,19 @@ export async function handlerUserCreate(req: Request, res: Response) {
         throw new BadRequestError("Please provide a valid email, username, and password")
     }
 
-    if (typeof password !== "string" || password.length < 8 ) {
-        throw new BadRequestError("Please provide a valid email, username, and password")
-    }
-
     const normalizedEmail = email.toLowerCase().trim()
     const trimmedUsername = typeof username === "string" ? username.trim() : ""
     if (!/^[a-zA-Z0-9_]{3,30}$/.test(trimmedUsername)) {
         throw new BadRequestError("Username must be 3-30 characters (letters, numbers, underscores)")
     }
+    await validateNewPassword(password, {
+        email: normalizedEmail,
+        username: trimmedUsername,
+    })
     const hashedPassword = await hashPassword(password)
 
     try {
-        const newUser = await createUser({ email: normalizedEmail, username, hashedPassword })
+        const newUser = await createUser({ email: normalizedEmail, username: trimmedUsername, hashedPassword })
 
         const publicUser: PublicUser = {
             id: newUser.id,

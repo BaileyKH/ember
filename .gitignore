@@ -1,6 +1,12 @@
 node_modules/
 dist/
-.env
+
+# Environment Variables
+.env*
 .env.local
 .env*.local
+
+# Personal Notes 
 roadmap.md
+frontend.md
+beNotes.md

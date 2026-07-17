@@ -5,6 +5,7 @@ import {
   NotFoundError,
   UserForbiddenError,
   UserNotAuthenticatedError,
+  ServiceUnavailableError,
 } from "./errors.js";
 
 
@@ -23,6 +24,9 @@ export function middlewareErrorHandler(err: Error, req: Request, res: Response, 
     message = err.message;
   } else if (err instanceof NotFoundError) {
     statusCode = 404;
+    message = err.message;
+  } else if (err instanceof ServiceUnavailableError) {
+    statusCode = 503;
     message = err.message;
   }
 
